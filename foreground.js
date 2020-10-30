@@ -3,6 +3,7 @@ console.log(location);
 let x = document.getElementsByClassName("video-player");
 console.log(x);
 console.log("wtsdfasd");
+console.log("test");
 (function() {
     var _tmuteVars = { "timerCheck": 1000, // Checking rate of ad in progress (in ms ; EDITABLE)
                       "playerMuted": false, // Player muted or not
