@@ -1,9 +1,3 @@
-console.log('from foregroud');
-console.log(location);
-let x = document.getElementsByClassName("video-player");
-console.log(x);
-console.log("wtsdfasd");
-console.log("test");
 (function() {
     var _tmuteVars = { "timerCheck": 1000, // Checking rate of ad in progress (in ms ; EDITABLE)
                       "playerMuted": false, // Player muted or not
@@ -37,7 +31,6 @@ console.log("test");
     // Check if there's an ad
     function checkAd()
     { 
-        console.log("wtf1")
       // Check if you're watching a stream, useless to continue if not
       if (_tmuteVars.highwindPlayer === undefined) {
         var isOldPlayer = document.getElementsByClassName(_tmuteSelectors.old.player).length;
@@ -93,7 +86,6 @@ console.log("test");
     // (un)Mute Player
     function mutePlayer()
     {
-        console.log("wtf2")
       if (document.querySelectorAll(currentSelector.muteButton).length >= 1)
       {
         if (_tmuteVars.alreadyMuted === false) document.querySelectorAll(currentSelector.muteButton)[_tmuteVars.playerIdAds].click(); // If the player is already muted before an ad, we avoid to unmute it.
@@ -104,11 +96,11 @@ console.log("test");
           _tmuteVars.adsDisplayed++;
           _tmuteVars.adElapsedTime = 1;
           console.log("Ad #" + _tmuteVars.adsDisplayed + " detected. Player " + (_tmuteVars.alreadyMuted === true ? "already " : "") + "muted.");
-          if (_tmuteVars.disableDisplay === true) document.querySelectorAll(currentSelector.playerVideo)[_tmuteVars.playerIdAds].style.visibility = "hidden";
+          if (_tmuteVars.disableDisplay === true) document.getElementsByClassName("video-player")[0].style.display = "none";
         } else {
           console.log("Ad #" + _tmuteVars.adsDisplayed + " finished (lasted " + _tmuteVars.adElapsedTime + "s)." + (_tmuteVars.alreadyMuted === true ? "" : " Player unmuted."));
           _tmuteVars.adElapsedTime = undefined;
-          if (_tmuteVars.disableDisplay === true) document.querySelectorAll(currentSelector.playerVideo)[_tmuteVars.playerIdAds].style.visibility = "visible";
+          if (_tmuteVars.disableDisplay === true) document.getElementsByClassName("video-player")[0].style.display = "block";
         }
       } else {
         console.log("No volume button found (class changed ?).");
@@ -118,13 +110,12 @@ console.log("test");
     // Manage ads options
     function adsOptions(changeType = "show")
     {
-        console.log("wtf3")
       switch(changeType) {
         // Manage player display during an ad (either hiding the ads or still showing them)
           case "display":
           _tmuteVars.disableDisplay = !(_tmuteVars.disableDisplay);
           // Update the player display if an ad is supposedly in progress
-          if (_tmuteVars.playerMuted === true) document.querySelectorAll(currentSelector.playerVideo)[_tmuteVars.playerIdAds].style.visibility = (_tmuteVars.disableDisplay === true) ? "hidden" : "visible";
+          if (_tmuteVars.playerMuted === true) document.querySelectorAll(currentSelector.playerVideo)[_tmuteVars.playerIdAds].style.display = (_tmuteVars.disableDisplay === true) ? "none" : "block";
           document.getElementById("_tmads_display").innerText = (_tmuteVars.disableDisplay === true ? "Show" : "Hide") + " player during ads";
           break;
         // Force a player unlock if Twitch didn't remove the ad notice properly instead of waiting the auto unlock
