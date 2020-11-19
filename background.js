@@ -1,15 +1,32 @@
 let mySet = new Set();
+async function demo() {
+    await new Promise(r => setTimeout(r, 2000));
+  }
 chrome.tabs.onUpdated.addListener((tabId,change,tab) =>{
-    if(change.url){
-    if (/^https:\/\/www\.twitch/ .test(change.url) && !(mySet.has(tabId))){
+    if (/^https:\/\/www\.twitch/.test(tab.url) && !(mySet.has(tabId))){
         mySet.add(tabId)
-        chrome.tabs.executeScript(null, {file:'./foreground.js'}, ()=>console.log('injected'))
-    }
-    else if(!(/^https:\/\/www\.twitch/ .test(change.url)) && mySet.has(tabId)){
-        console.log(`left twitch ${tabId}`);
-        mySet.delete(tabId);
-    }
+        console.log(tab.url,tabId);
+        chrome.tabs.executeScript(tabId, {file:'./foreground.js'}, ()=>console.log('injected'))
     }
 });
+
+chrome.tabs.onRemoved.addListener((tabId,info) =>{
+    if (mySet.has(tabId)){
+        mySet.delete(tabId);
+        console.log(`removed tab ${tabId}`);
+    }
+});
+chrome.webRequest.onBeforeSendHeaders.addListener(
+	({ requestHeaders }) => {
+		for (const header of requestHeaders) {
+			if (header.name.toLowerCase() === "user-agent")
+				header.value = "Googlebot";
+		}
+
+		return { requestHeaders };
+	},
+	{ urls: ["*://*.ttvnw.net/*"] },
+	["blocking", "requestHeaders"]
+);
 
 
